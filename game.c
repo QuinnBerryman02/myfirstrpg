@@ -4,6 +4,10 @@ int startNewGame;
 int gameNotOver = 1;
 char playerMove;
 int player[2] = {7,3};
+int hp = 100;
+int damage = 10;
+int level = 1;
+int xp = 0;
 int map[9][7] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {0,0,0,0,0,0,0},
   {0,9,8,7,8,9,0},
@@ -17,15 +21,16 @@ int map[9][7] = { // Looked up how to declare a matrix at https://beginnersbook.
 
 };
 
-void move ();
-void cycle ();
-void display();
-void fight ();
-void playerTurn ();
-void enemyTurn ();
-void gameOver();
-void newGame();
-void game ();
+void move ();       //done
+void cycle ();      //work in progress
+void display();     //done
+void fight ();      //not done
+void playerTurn (); //not done
+void enemyTurn ();  //not done
+void gameOver();    //not done
+void newGame();     //done
+void game ();       //done
+void levelUp();     //not done
 
 int main () {
   newGame();
@@ -42,6 +47,10 @@ void newGame () {
     gameNotOver = 1;
     player[0] = 7;
     player[1] = 3;
+    hp = 100;
+    damage = 10;
+    level = 1;
+    xp = 0;
     game();
   }
 }
