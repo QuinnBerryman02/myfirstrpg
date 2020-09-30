@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int startNewGame;
+int gameNotOver = 1;
 
 char move ();
 void cycle ();
@@ -10,6 +11,7 @@ void playerTurn ();
 void enemyTurn ();
 void gameOver();
 void newGame();
+void game ();
 
 int main () {
   newGame();
@@ -17,11 +19,24 @@ int main () {
 }
 
 void newGame () {
-  printf("Would you like to start a new game?\t");
+  printf("NEW GAME?\t");
   scanf("%d",&startNewGame);
   if (startNewGame == 0) {
-    printf("Goodbye");
+    printf("GOODBYE");
   } else {
-    printf("Game start!");
+    printf("GAME START\n");
+    game();
   }
+}
+
+void game () {
+  while (gameNotOver) {
+    cycle();
+  }
+  printf("GAME OVER\n");
+  newGame();
+}
+
+void cycle () {
+  gameNotOver = 0;
 }
