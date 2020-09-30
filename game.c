@@ -8,6 +8,8 @@ int hp = 100;
 int damage = 10;
 int level = 1;
 int xp = 0;
+int eHp;
+int eDamage;
 int map[9][7] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {0,0,0,0,0,0,0},
   {0,9,8,7,8,9,0},
@@ -18,7 +20,6 @@ int map[9][7] = { // Looked up how to declare a matrix at https://beginnersbook.
   {0,4,3,2,3,4,0},
   {0,3,2,1,2,3,0},
   {0,0,0,0,0,0,0}
-
 };
 
 void move ();       //done
@@ -66,6 +67,7 @@ void game () {
 void cycle () {
   move();
   display();
+  fight();
 //  gameNotOver = 0;
 }
 
@@ -136,4 +138,34 @@ void display () {
       }
     }
   }
+}
+
+void levelUp () {
+  hp = hp + 10;
+  damage++;
+  level++;
+  printf("YOU HAVE REACHED LEVEL %d", level);
+}
+
+void fight () {
+  int r = rand() % 4;
+  if (r != 0) {
+    eHp = (map[player[0]][player[1]] * 100) + (rand()%100);
+    eDamage = (map[player[0]][player[1]] * 10) +(rand()%10);
+    playerTurn();
+    if (hp <= 0) {
+      gameOver();
+    } else if (eHp <= 0) {
+      printf("YOU WIN!");
+      xp = xp + (eHp*(rand()%5));
+      printf("%dXP GAINED", (eHp*(rand()%5)));
+      if (xp >= level*100) {
+        levelUp();
+      }
+    }
+  }
+}
+
+void playerTurn () {
+  
 }
