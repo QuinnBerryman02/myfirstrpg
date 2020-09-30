@@ -56,7 +56,7 @@ void game () {
 
 void cycle () {
   move();
-  
+  display();
 //  gameNotOver = 0;
 }
 
@@ -100,5 +100,31 @@ void move () {
     default:
       printf("%c IS NOT VALID, USE WASD!\n", playerMove);
       move();
+  }
+}
+
+void display () {
+  int i;
+  int j;
+  for (i=0;i<9;i++) {
+    for (j=0;j<7;j++) {
+      if ((i == player[0]) && (j == player[1])) {
+        printf("@");
+      } else if ((map[i][j] == 0) && ((i == 0) || (i == 8)) && ((j != 0) && (j != 6))) {
+        printf("-");
+      } else if ((map[i][j] == 0) && ((j == 0) || (j == 6)) && ((i != 0) && (i != 8))) {
+        printf("|");
+        if (j==6) {
+          printf("\n");
+        }
+      } else if ((map[i][j] == 0) && ((i == 0) || (i == 8)) && ((j == 0) || (j == 6))) {
+        printf("Q");
+        if (j==6) {
+          printf("\n");
+        }
+      } else {
+        printf(" ");
+      }
+    }
   }
 }
