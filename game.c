@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-int startNewGame;
+char startNewGame;
+char action;
 int gameNotOver = 1;
 char playerMove;
 int player[2] = {7,3};
@@ -17,31 +18,31 @@ int map[9][7] = { // Looked up how to declare a matrix at https://beginnersbook.
   {0,7,6,5,6,7,0},
   {0,6,5,4,5,6,0},
   {0,5,4,3,4,5,0},
-  {0,4,3,2,3,4,0},
-  {0,3,2,1,2,3,0},
+  {0,4,3,1,3,4,0},
+  {0,2,1,1,1,2,0},
   {0,0,0,0,0,0,0}
 };
 
 void move ();       //done
-void cycle ();      //work in progress
+void cycle ();      //done
 void display();     //done
-void fight ();      //not done
-void playerTurn (); //not done
-void enemyTurn ();  //not done
-void gameOver();    //not done
+void fight ();      //done
+void playerTurn (); //done
+void enemyTurn ();  //done
 void newGame();     //done
 void game ();       //done
-void levelUp();     //not done
+void levelUp();     //done
 
 int main () {
+  printf("CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\nACTIONS:\n\ta = attack\n\ti = inventory\n\tw = wait\n");
   newGame();
   return 0;
 }
 
 void newGame () {
   printf("NEW GAME?\t");
-  scanf("%d",&startNewGame);
-  if (startNewGame == 0) {
+  scanf(" %c",&startNewGame);
+  if (startNewGame == 'n') {
     printf("GOODBYE!");
   } else {
     printf("GAME START!\n");
@@ -60,11 +61,12 @@ void game () {
   while (gameNotOver) {
     cycle();
   }
-  printf("GAME OVER!\nYOU REACHED LVL %d",level);
+  printf("GAME OVER!\nYOU REACHED LVL %d\n",level);
   newGame();
 }
 
 void cycle () {
+  display();
   move();
   display();
   fight();
@@ -144,25 +146,56 @@ void levelUp () {
   hp = hp + 10;
   damage++;
   level++;
-  printf("YOU HAVE REACHED LEVEL %d", level);
+  printf("YOU HAVE REACHED LEVEL %d\n", level);
 }
 
 void fight () {
-  eHp = (map[player[0]][player[1]] * 100);
+  eHp = (map[player[0]][player[1]] * 75);
   eDamage = (map[player[0]][player[1]] * 10);
-  playerTurn();
+  hp = 100 + ((level-1) * 10);
+  damage = 10 + ((level-1) * 1);
+  printf("ENEMY ARRIVAL!!\nA LVL %d IMP HAS COME TO MURDER YOU!!\n", map[player[0]][player[1]]);
+  while ((hp > 0) && (eHp > 0)) {
+    playerTurn();
+    if ((hp > 0) && (eHp > 0)) {
+      enemyTurn();
+    }
+  }
   if (hp <= 0) {
     gameNotOver = 0;
   } else if (eHp <= 0) {
-    printf("YOU WIN!");
-    xp = xp + eHp;
-    printf("%dXP GAINED", eHp);
-    if (xp >= level*100) {
+    printf("YOU WIN THE FIGHT!\n");
+    xp = xp + (map[player[0]][player[1]] * 50);
+    printf("%dXP GAINED\n", (map[player[0]][player[1]] * 50));
+    while (xp >= level*100) {
       levelUp();
     }
   }
 }
 
 void playerTurn () {
+  printf("WHAT WILL YOU DO?\t");
+  scanf(" %c",&action);
+  switch (action) {
+    case 'a':
+      printf("YOU SWING YOUR MIGHTY STICK!!\n");
+      eHp = eHp - damage;
+      printf("YOU DEAL %d damage!!\t the imp has %d hp left\n",damage,eHp);
+      break;
+    case 'i':
+      printf("YOU DONT HAVE POCKETS!!\n");
+      break;
+    case 'w':
+      printf("YOU WAIT FOR AN OPENING!!\n");
+      break;
+    default:
+      printf("YOU STUMBLE AND FALL!!\n");
+      break;
+  }
+}
 
+void enemyTurn() {
+  printf("THE IMP BITES YOU!!\n");
+  hp = hp - eDamage;
+  printf("IT DEALS %d damage!!\t you have %d hp left\n",eDamage,hp);
 }
