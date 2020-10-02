@@ -60,7 +60,7 @@ void game () {
   while (gameNotOver) {
     cycle();
   }
-  printf("GAME OVER!\n");
+  printf("GAME OVER!\nYOU REACHED LVL %d",level);
   newGame();
 }
 
@@ -148,24 +148,21 @@ void levelUp () {
 }
 
 void fight () {
-  int r = rand() % 4;
-  if (r != 0) {
-    eHp = (map[player[0]][player[1]] * 100) + (rand()%100);
-    eDamage = (map[player[0]][player[1]] * 10) +(rand()%10);
-    playerTurn();
-    if (hp <= 0) {
-      gameOver();
-    } else if (eHp <= 0) {
-      printf("YOU WIN!");
-      xp = xp + (eHp*(rand()%5));
-      printf("%dXP GAINED", (eHp*(rand()%5)));
-      if (xp >= level*100) {
-        levelUp();
-      }
+  eHp = (map[player[0]][player[1]] * 100);
+  eDamage = (map[player[0]][player[1]] * 10);
+  playerTurn();
+  if (hp <= 0) {
+    gameNotOver = 0;
+  } else if (eHp <= 0) {
+    printf("YOU WIN!");
+    xp = xp + eHp;
+    printf("%dXP GAINED", eHp);
+    if (xp >= level*100) {
+      levelUp();
     }
   }
 }
 
 void playerTurn () {
-  
+
 }
