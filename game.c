@@ -10,6 +10,7 @@ char startNewGame;
 char action;
 int gameNotOver = 1;
 char playerMove;
+int oldMove[2] = {7,3};
 int player[2] = {7,3};
 int hp = 100;
 int damage = 10;
@@ -18,6 +19,7 @@ int sword = 0;
 int xp = 0;
 int eHp;
 int eDamage;
+int runAway = 0;
 int map[64][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -112,7 +114,7 @@ int main () {
 
 void newGame () {
   wprintf(L"\e[1;1H\e[2J");
-  wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\nz = map\nc = camp\nACTIONS:\n\ta = attack\n\ti = inventory\n\tw = wait\n");
+  wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\n\tz = map\n\tc = camp\nACTIONS:\n\ta = attack\n\tq = inventory\n\tw = wait\n\ts = retreat\n");
   wprintf(L"NEW GAME?\t");
   scanf(" %c",&startNewGame);
   if (startNewGame == 'n') {
@@ -165,6 +167,8 @@ void move () {
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
         move();
       } else {
+
+        oldMove[0] = player[0];
         player[0] = player[0] - 1;
       }
       break;
@@ -173,6 +177,7 @@ void move () {
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
         move();
       } else {
+        oldMove[1] = player[1];
         player[1] = player[1] - 1;
       }
       break;
@@ -181,6 +186,7 @@ void move () {
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
         move();
       } else {
+        oldMove[0] = player[0];
         player[0] = player[0] + 1;
       }
       break;
@@ -189,6 +195,7 @@ void move () {
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
         move();
       } else {
+        oldMove[1] = player[1];
         player[1] = player[1] + 1;
       }
       break;
@@ -300,6 +307,7 @@ void levelUp () {
 }
 
 void fightSetUp() {
+  runAway = 0;
   eHp = (map[player[0]][player[1]] * 75);
   eDamage = (map[player[0]][player[1]] * 10);
   hp = 100 + ((level-1) * 10);
@@ -316,7 +324,7 @@ void fightSetUp() {
 
 void fight () {
   wprintf(L"A LVL %d ENEMY HAS COME TO MURDER YOU!!\n", map[player[0]][player[1]]);
-  while ((hp > 0) && (eHp > 0)) {
+  while ((hp > 0) && (eHp > 0) && (runAway == 0)) {
     playerTurn();
     if ((hp > 0) && (eHp > 0)) {
       enemyTurn();
@@ -396,11 +404,17 @@ void playerTurn () {
         wprintf(L"THE ENEMY HAS %d HP LEFT\n",eHp);
       }
       break;
-    case 'i':
+    case 'q':
       wprintf(L"YOU DONT HAVE POCKETS!!\n");
       break;
     case 'w':
       wprintf(L"YOU WAIT FOR AN OPENING!!\n");
+      break;
+    case 's':
+      wprintf(L"YOU RUN AWAY LIKE A COWARD!!\n");
+      player[0] = oldMove[0];
+      player[1] = oldMove[1];
+      runAway = 1;
       break;
     default:
       wprintf(L"YOU STUMBLE AND FALL!!\n");
