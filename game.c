@@ -212,15 +212,21 @@ void display () {
     wprintf(L"\033[0m");
     for (j=player[1]-2;j<player[1]+3;j++) {
       if ((i == player[0]) && (j == player[1])) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
         wprintf(L"&&");
+          SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       } else if (map[i][j] == 0) {
         //
       } else if (map[i][j] == -1) {
         wprintf(L"██");
       } else if (map[i][j] > 0) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
         wprintf(L"  ");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       } else if (map[i][j] < -3) {
-        wprintf(L"XX");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY);
+        wprintf(L"**");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       }
     }
     wprintf(L"\033[1;30m");
@@ -235,6 +241,7 @@ void display () {
 }
 
 void displayMap() {
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
   int i;
   int j;
   for (i=0;i<69;i++) {
@@ -248,11 +255,14 @@ void displayMap() {
       } else if (map[i][j] > 0) {
         wprintf(L"  ");
       } else if (map[i][j] == -9) {
+        wprintf(L"\033[0;31m");
         wprintf(L"XX");
+        wprintf(L"\033[0m");
       }
     }
     wprintf(L"\n");
   }
+  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
 }
 
 void levelUp () {
