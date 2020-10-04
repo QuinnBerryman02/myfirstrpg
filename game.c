@@ -13,27 +13,28 @@ int player[2] = {7,3};
 int hp = 100;
 int damage = 10;
 int level = 1;
+int sword = 0;
 int xp = 0;
 int eHp;
 int eDamage;
 int map[69][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+3,-4,-4,+3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+3,+4,-4,+3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+2,+3,+3,+2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+2,+2,+2,+2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+1,+1,+1,+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+1,+1,+1,+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+1,+1,+1,+1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,+4,+4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+4,+4,+4,+4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+4,+4,+4,+4,+4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+5,+4,+5,+4,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+5,+6,-7,+5,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+5,+6,+5,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+5,+5,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+5,+5,+5,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+6,+6,+6,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+6,-7,+6,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+6,+6,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+5,+6,+6,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,+7,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+1,+1,+1,+2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,-1,+7,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+8,+7,+8,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -98,6 +99,11 @@ void newGame();     //done
 void game ();       //done
 void levelUp();     //done
 void displayMap();
+void bossDead();
+void bossIntro();
+void bossFight();
+void bossTurn();
+void fightSetUp();
 
 int main () {
   //system("MODE 56,37");
@@ -148,8 +154,7 @@ void cycle () {
   display();
   move();
   display();
-  fight();
-//  gameNotOver = 0;
+  fightSetUp();
 }
 
 void move () {
@@ -254,9 +259,9 @@ void displayMap() {
         wprintf(L"██");
       } else if (map[i][j] > 0) {
         wprintf(L"  ");
-      } else if (map[i][j] == -9) {
+      } else if (map[i][j] < -3) {
         wprintf(L"\033[0;31m");
-        wprintf(L"XX");
+        wprintf(L"**");
         wprintf(L"\033[0m");
       }
     }
@@ -272,12 +277,23 @@ void levelUp () {
   wprintf(L"YOU HAVE REACHED LEVEL %d\n", level);
 }
 
-void fight () {
+void fightSetUp() {
   eHp = (map[player[0]][player[1]] * 75);
   eDamage = (map[player[0]][player[1]] * 10);
   hp = 100 + ((level-1) * 10);
   damage = 10 + ((level-1) * 1);
-  wprintf(L"ENEMY ARRIVAL!!\nA LVL %d IMP HAS COME TO MURDER YOU!!\n", map[player[0]][player[1]]);
+  if (eHp < 0) {
+    eHp = eHp * -1;
+    eDamage = eDamage * -1;
+    bossFight();
+  } else {
+    fight();
+  }
+
+}
+
+void fight () {
+  wprintf(L"A LVL %d ENEMY HAS COME TO MURDER YOU!!\n", map[player[0]][player[1]]);
   while ((hp > 0) && (eHp > 0)) {
     playerTurn();
     if ((hp > 0) && (eHp > 0)) {
@@ -296,14 +312,67 @@ void fight () {
   }
 }
 
+void bossFight () {
+  wprintf(L"BOSS ARRIVAL!!\n");
+  bossIntro();
+  while ((hp > 0) && (eHp > 0)) {
+    playerTurn();
+    if ((hp > 0) && (eHp > 0)) {
+      bossTurn();
+    }
+  }
+  if (hp <= 0) {
+    gameNotOver = 0;
+  } else if (eHp <= 0) {
+    wprintf(L"YOU WIN THE FIGHT!\n");
+    xp = xp + (map[player[0]][player[1]] * -200);
+    wprintf(L"%dXP GAINED\n", (map[player[0]][player[1]] * -200));
+    while (xp >= level*100) {
+      levelUp();
+    }
+    bossDead();
+  }
+}
+
 void playerTurn () {
   wprintf(L"WHAT WILL YOU DO?\t");
   scanf(" %c",&action);
   switch (action) {
     case 'a':
-      wprintf(L"YOU SWING YOUR MIGHTY STICK!!\n");
-      eHp = eHp - damage;
-      wprintf(L"YOU DEAL %d damage!!\t the imp has %d hp left\n",damage,eHp);
+      if (sword == 0) {
+        wprintf(L"YOU SWING YOUR MIGHTY STICK!!\n");
+        eHp = eHp - damage;
+        wprintf(L"YOU DEAL %d DAMAGE!!\t\t\t\t", damage);
+      } else if (sword == 1) {
+        wprintf(L"YOU THRUST YOUR RUSTY SWORD!!\n");
+        eHp = eHp - (damage + 5);
+        wprintf(L"YOU DEAL %d DAMAGE!!\t\t\t\t", damage+5);
+      } else if (sword == 2) {
+        wprintf(L"YOU SLASH WITH GOBLINSLAYER!!\n");
+        eHp = eHp - (damage+15);
+        wprintf(L"YOU DEAL %d DAMAGE!!\t\t\t\t", damage+15);
+      }
+      if (map[player[0]][player[1]] == 1) {
+        wprintf(L"THE IMP HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 2) {
+        wprintf(L"THE BEEFY IMP HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 3) {
+        wprintf(L"THE STRONG IMP HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 4) {
+        wprintf(L"THE GUARDIAN IMP HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == -4) {
+        wprintf(L"THE IMPERIAL IMP HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == -7) {
+        wprintf(L"THE OMINOUS ORC HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 5) {
+        wprintf(L"THE YOUNG ORC HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 6) {
+        wprintf(L"THE WARRIOR ORC HAS %d HP LEFT\n",eHp);
+      } else if (map[player[0]][player[1]] == 7) {
+        wprintf(L"THE ASSASSIN ORC HAS %d HP LEFT\n",eHp);
+      } else {
+        wprintf(L"THE ENEMY HAS %d HP LEFT\n",eHp);
+      }
       break;
     case 'i':
       wprintf(L"YOU DONT HAVE POCKETS!!\n");
@@ -318,7 +387,63 @@ void playerTurn () {
 }
 
 void enemyTurn() {
-  wprintf(L"THE IMP BITES YOU!!\n");
+  if (map[player[0]][player[1]] == 1) {
+    wprintf(L"THE IMP FLAILS AT YOU!!\n");
+  } else if (map[player[0]][player[1]] == 2) {
+    wprintf(L"THE BEEFY IMP BITES YOU!!\n");
+  } else if (map[player[0]][player[1]] == 3) {
+    wprintf(L"THE STRONG IMP KICKS YOU!!\n");
+  } else if (map[player[0]][player[1]] == 4) {
+    wprintf(L"THE GUARDIAN IMP PARRIES YOU!!\n");
+  } else if (map[player[0]][player[1]] == 5) {
+    wprintf(L"THE YOUNG ORC PUNCHES YOU!!\n");
+  } else if (map[player[0]][player[1]] == 6) {
+    wprintf(L"THE WARRIOR ORC CHARGES YOU!!\n");
+  } else if (map[player[0]][player[1]] == 7) {
+    wprintf(L"THE ASSASSIN ORC STABS YOU!!\n");
+  } else {
+    wprintf(L"THE ENEMY HITS YOU!!\n");
+  }
   hp = hp - eDamage;
-  wprintf(L"IT DEALS %d damage!!\t you have %d hp left\n",eDamage,hp);
+  wprintf(L"IT DEALS %d damage!!\t\t\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+}
+
+void bossTurn () {
+  if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"THE IMPERIAL IMP THROWS AN IMP AT YOU!!\n");
+    hp = hp - eDamage;
+    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+  } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"THE OMINOUS ORC LAUNCHES A PILLAR AT YOU!!\n");
+    hp = hp - eDamage;
+    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+  }
+}
+
+void bossIntro () {
+  if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN\nYOU SHALL NOW FACE THE WRATH OF THE ");
+    wprintf(L"\033[0;31m");
+    wprintf(L"IMPERIAL IMP!!\n");
+    wprintf(L"\033[0m");
+  } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE\nYOU SHALL NOW FACE THE FURY OF THE ");
+    wprintf(L"\033[0;31m");
+    wprintf(L"OMINOUS ORC!!\n");
+    wprintf(L"\033[0m");
+  }
+}
+
+void bossDead() {
+  if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME!!\n");
+    map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
+    wprintf(L"AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND A RUSTY SWORD ... AT LEAST ITS BETTER THAN YOUR MIGHTY STICK\nRUSTY SWORD OBTAINED!!\n");
+    sword = 1;
+  } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME!!\n");
+    map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
+    wprintf(L"AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL\nGOBLINSLAYER OBTAINED!!\n");
+    sword = 2;
+  }
 }
