@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <io.h>
 #include <fcntl.h>
 #include <windows.h>
@@ -17,7 +18,7 @@ int sword = 0;
 int xp = 0;
 int eHp;
 int eDamage;
-int map[69][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
+int map[64][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+3,+4,-4,+3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -79,15 +80,11 @@ int map[69][60] = { // Looked up how to declare a matrix at https://beginnersboo
   {-1,-1,+5,+4,+5,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+4,+3,+4,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+3,+1,+3,+4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+1,+1,+1,+2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+8,+7,+8,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+7,+6,+7,+8,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+6,+5,+6,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
-};
+//  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+//  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  };
 
 void move ();       //done
 void cycle ();      //done
@@ -109,12 +106,13 @@ int main () {
   //system("MODE 56,37");
   system("MODE 120,75");
   _setmode(_fileno(stdout), 0x00020000);
-  wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\nACTIONS:\n\ta = attack\n\ti = inventory\n\tw = wait\n");
   newGame();
   return 0;
 }
 
 void newGame () {
+  wprintf(L"\e[1;1H\e[2J");
+  wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\nz = map\nc = camp\nACTIONS:\n\ta = attack\n\ti = inventory\n\tw = wait\n");
   wprintf(L"NEW GAME?\t");
   scanf(" %c",&startNewGame);
   if (startNewGame == 'n') {
@@ -197,6 +195,10 @@ void move () {
     case 'c':
       wprintf(L"YOU CAMP FOR THE NIGHT\n");
       break;
+    case 'z':
+      wprintf(L"YOU OPEN UP YOUR MAP\n");
+      displayMap();
+      break;
     default:
       wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
       move();
@@ -219,11 +221,13 @@ void display () {
       if ((i == player[0]) && (j == player[1])) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
         wprintf(L"&&");
-          SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       } else if (map[i][j] == 0) {
         //
       } else if (map[i][j] == -1) {
+        wprintf(L"\033[0;37m");
         wprintf(L"██");
+        wprintf(L"\033[0m");
       } else if (map[i][j] > 0) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
         wprintf(L"  ");
@@ -245,29 +249,47 @@ void display () {
   wprintf(L"\n");
 }
 
-void displayMap() {
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
+void displayMap () {
   int i;
   int j;
-  for (i=0;i<69;i++) {
+  wprintf(L"\033[1;30m");
+  wprintf(L"████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████");
+  wprintf(L"\033[0m");
+  wprintf(L"\n");
+  for (i=0;i<63;i++) {
+    wprintf(L"\033[1;30m");
+    wprintf(L"██");
+    wprintf(L"\033[0m");
     for (j=0;j<60;j++) {
       if ((i == player[0]) && (j == player[1])) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
         wprintf(L"&&");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       } else if (map[i][j] == 0) {
         //
       } else if (map[i][j] == -1) {
+        wprintf(L"\033[0;37m");
         wprintf(L"██");
-      } else if (map[i][j] > 0) {
-        wprintf(L"  ");
-      } else if (map[i][j] < -3) {
-        wprintf(L"\033[0;31m");
-        wprintf(L"**");
         wprintf(L"\033[0m");
+      } else if (map[i][j] > 0) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),BACKGROUND_GREEN|BACKGROUND_INTENSITY);
+        wprintf(L"  ");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
+      } else if (map[i][j] < -3) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|BACKGROUND_GREEN|BACKGROUND_INTENSITY);
+        wprintf(L"**");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
       }
     }
+    wprintf(L"\033[1;30m");
+    wprintf(L"██");
+    wprintf(L"\033[0m");
     wprintf(L"\n");
   }
-  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED| FOREGROUND_GREEN| FOREGROUND_BLUE| FOREGROUND_INTENSITY);
+  wprintf(L"\033[1;30m");
+  wprintf(L"████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████");
+  wprintf(L"\033[0m");
+  wprintf(L"\n");
 }
 
 void levelUp () {
