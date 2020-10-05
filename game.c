@@ -114,13 +114,20 @@ int main () {
 
 void newGame () {
   wprintf(L"\e[1;1H\e[2J");
+  wprintf(L"\033[0;33m");
   wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\n\tz = map\n\tc = camp\nACTIONS:\n\ta = attack\n\tq = inventory\n\tw = wait\n\ts = retreat\n");
+  wprintf(L"\033[0;32m");
   wprintf(L"NEW GAME?\t");
+  wprintf(L"\033[0;33m");
+  wprintf(L"\033[0;36m");
   scanf(" %c",&startNewGame);
+  wprintf(L"\033[0m");
   if (startNewGame == 'n') {
     wprintf(L"GOODBYE!");
+    wprintf(L"\033[0m");
   } else if (startNewGame == 'd') {
     wprintf(L"DEV MODE!\n");
+    wprintf(L"\033[0m");
     gameNotOver = 1;
     player[0] = 7;
     player[1] = 3;
@@ -131,6 +138,7 @@ void newGame () {
     game();
   } else {
     wprintf(L"GAME START!\n");
+    wprintf(L"\033[0m");
     gameNotOver = 1;
     player[0] = 7;
     player[1] = 3;
@@ -146,7 +154,11 @@ void game () {
   while (gameNotOver) {
     cycle();
   }
-  wprintf(L"GAME OVER!\nYOU REACHED LVL %d\n",level);
+  wprintf(L"\033[0;33m");
+  wprintf(L"GAME OVER!\n");
+  wprintf(L"\033[0;34m");
+  wprintf(L"YOU REACHED LVL %d\n",level);
+  wprintf(L"\033[0m");
   newGame();
 }
 
@@ -159,12 +171,17 @@ void cycle () {
 
 void move () {
   playerMove = ' ';
+  wprintf(L"\033[0;32m");
   wprintf(L"MOVE WHERE?\t");
+  wprintf(L"\033[0;36m");
   scanf(" %c", &playerMove); // couldnt figure out why scanf("%c") wasnt working, apparently scanf reads the enter key as an input and so gets skipped https://stackoverflow.com/questions/29775323/scanf-function-seems-to-be-skipped-in-c#:~:text=The%20problem%20is%20because%20of,second%20call%20to%20scanf()%20.&text=So%2C%20the%20newline%20character%20is,for%20input%20for%20that%20variable.
+  wprintf(L"\033[0m");
   switch (playerMove) {
     case 'w':
       if (map[player[0]-1][player[1]] == -1) {
+        wprintf(L"\033[0;33m");
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
+        wprintf(L"\033[0m");
         move();
       } else {
 
@@ -174,7 +191,9 @@ void move () {
       break;
     case 'a':
       if (map[player[0]][player[1]-1] == -1) {
+        wprintf(L"\033[0;33m");
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
+        wprintf(L"\033[0m");
         move();
       } else {
         oldMove[1] = player[1];
@@ -183,7 +202,9 @@ void move () {
       break;
     case 's':
       if (map[player[0]+1][player[1]] == -1) {
+        wprintf(L"\033[0;33m");
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
+        wprintf(L"\033[0m");
         move();
       } else {
         oldMove[0] = player[0];
@@ -192,7 +213,9 @@ void move () {
       break;
     case 'd':
       if (map[player[0]][player[1]+1] == -1) {
+        wprintf(L"\033[0;33m");
         wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
+        wprintf(L"\033[0m");
         move();
       } else {
         oldMove[1] = player[1];
@@ -200,14 +223,20 @@ void move () {
       }
       break;
     case 'c':
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU CAMP FOR THE NIGHT\n");
+      wprintf(L"\033[0m");
       break;
     case 'z':
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU OPEN UP YOUR MAP\n");
+      wprintf(L"\033[0m");
       displayMap();
       break;
     default:
+      wprintf(L"\033[0;33m");
       wprintf(L"%c IS NOT VALID, USE WASD!\n", playerMove);
+      wprintf(L"\033[0m");
       move();
       break;
   }
@@ -303,7 +332,9 @@ void levelUp () {
   hp = hp + 10;
   damage++;
   level++;
+  wprintf(L"\033[0;34m");
   wprintf(L"YOU HAVE REACHED LEVEL %d\n", level);
+  wprintf(L"\033[0m");
 }
 
 void fightSetUp() {
@@ -323,7 +354,9 @@ void fightSetUp() {
 }
 
 void fight () {
+  wprintf(L"\033[0;33m");
   wprintf(L"A LVL %d ENEMY HAS COME TO MURDER YOU!!\n", map[player[0]][player[1]]);
+  wprintf(L"\033[0m");
   while ((hp > 0) && (eHp > 0) && (runAway == 0)) {
     playerTurn();
     if ((hp > 0) && (eHp > 0)) {
@@ -333,9 +366,13 @@ void fight () {
   if (hp <= 0) {
     gameNotOver = 0;
   } else if (eHp <= 0) {
+    wprintf(L"\033[0;34m");
     wprintf(L"YOU WIN THE FIGHT!\n");
+    wprintf(L"\033[0m");
     xp = xp + (map[player[0]][player[1]] * 50);
+    wprintf(L"\033[0;33m");
     wprintf(L"%dXP GAINED\n", (map[player[0]][player[1]] * 50));
+    wprintf(L"\033[0m");
     while (xp >= level*100) {
       levelUp();
     }
@@ -343,7 +380,9 @@ void fight () {
 }
 
 void bossFight () {
+  wprintf(L"\033[0;33m");
   wprintf(L"BOSS ARRIVAL!!\n");
+  wprintf(L"\033[0m");
   bossIntro();
   while ((hp > 0) && (eHp > 0)) {
     playerTurn();
@@ -354,9 +393,13 @@ void bossFight () {
   if (hp <= 0) {
     gameNotOver = 0;
   } else if (eHp <= 0) {
+    wprintf(L"\033[0;34m");
     wprintf(L"YOU WIN THE FIGHT!\n");
+    wprintf(L"\033[0m");
     xp = xp + (map[player[0]][player[1]] * -200);
+    wprintf(L"\033[0;33m");
     wprintf(L"%dXP GAINED\n", (map[player[0]][player[1]] * -200));
+    wprintf(L"\033[0m");
     while (xp >= level*100) {
       levelUp();
     }
@@ -365,10 +408,15 @@ void bossFight () {
 }
 
 void playerTurn () {
+  wprintf(L"\033[0;32m");
   wprintf(L"WHAT WILL YOU DO?\t");
+  wprintf(L"\033[0m");
+  wprintf(L"\033[0;36m");
   scanf(" %c",&action);
+  wprintf(L"\033[0m");
   switch (action) {
     case 'a':
+      wprintf(L"\033[0;34m");
       if (sword == 0) {
         wprintf(L"YOU SWING YOUR MIGHTY STICK!!\n");
         eHp = eHp - damage;
@@ -382,6 +430,7 @@ void playerTurn () {
         eHp = eHp - (damage+15);
         wprintf(L"YOU DEAL %d DAMAGE!!\t\t\t\t", damage+15);
       }
+      wprintf(L"\033[0;31m");
       if (map[player[0]][player[1]] == 1) {
         wprintf(L"THE IMP HAS %d HP LEFT\n",eHp);
       } else if (map[player[0]][player[1]] == 2) {
@@ -391,9 +440,13 @@ void playerTurn () {
       } else if (map[player[0]][player[1]] == 4) {
         wprintf(L"THE GUARDIAN IMP HAS %d HP LEFT\n",eHp);
       } else if (map[player[0]][player[1]] == -4) {
+        wprintf(L"\033[0;35m");
         wprintf(L"THE IMPERIAL IMP HAS %d HP LEFT\n",eHp);
+        wprintf(L"\033[0m");
       } else if (map[player[0]][player[1]] == -7) {
+        wprintf(L"\033[0;35m");
         wprintf(L"THE OMINOUS ORC HAS %d HP LEFT\n",eHp);
+        wprintf(L"\033[0m");
       } else if (map[player[0]][player[1]] == 5) {
         wprintf(L"THE YOUNG ORC HAS %d HP LEFT\n",eHp);
       } else if (map[player[0]][player[1]] == 6) {
@@ -403,26 +456,36 @@ void playerTurn () {
       } else {
         wprintf(L"THE ENEMY HAS %d HP LEFT\n",eHp);
       }
+      wprintf(L"\033[0m");
       break;
     case 'q':
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU DONT HAVE POCKETS!!\n");
+      wprintf(L"\033[0m");
       break;
     case 'w':
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU WAIT FOR AN OPENING!!\n");
+      wprintf(L"\033[0m");
       break;
     case 's':
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU RUN AWAY LIKE A COWARD!!\n");
+      wprintf(L"\033[0m");
       player[0] = oldMove[0];
       player[1] = oldMove[1];
       runAway = 1;
       break;
     default:
+      wprintf(L"\033[0;34m");
       wprintf(L"YOU STUMBLE AND FALL!!\n");
+      wprintf(L"\033[0m");
       break;
   }
 }
 
 void enemyTurn() {
+  wprintf(L"\033[0;31m");
   if (map[player[0]][player[1]] == 1) {
     wprintf(L"THE IMP FLAILS AT YOU!!\n");
   } else if (map[player[0]][player[1]] == 2) {
@@ -441,30 +504,41 @@ void enemyTurn() {
     wprintf(L"THE ENEMY HITS YOU!!\n");
   }
   hp = hp - eDamage;
-  wprintf(L"IT DEALS %d damage!!\t\t\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+  wprintf(L"IT DEALS %d damage!!\t\t\t\t",eDamage);
+  wprintf(L"\033[0;34m");
+  wprintf(L"YOU HAVE %d HP LEFT\n",hp);
+  wprintf(L"\033[0m");
 }
 
 void bossTurn () {
   if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"THE IMPERIAL IMP THROWS AN IMP AT YOU!!\n");
     hp = hp - eDamage;
-    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\t",eDamage);
+    wprintf(L"\033[0;34m");
+    wprintf(L"YOU HAVE %d HP LEFT\n",hp);
+    wprintf(L"\033[0m");
   } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"THE OMINOUS ORC LAUNCHES A PILLAR AT YOU!!\n");
     hp = hp - eDamage;
-    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\tYOU HAVE %d HP LEFT\n",eDamage,hp);
+    wprintf(L"The OMINOUS ORC DEALS %d DAMAGE!!\t\t",eDamage);
+    wprintf(L"\033[0;34m");
+    wprintf(L"YOU HAVE %d HP LEFT\n",hp);
+    wprintf(L"\033[0m");
   }
 }
 
 void bossIntro () {
   if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN\nYOU SHALL NOW FACE THE WRATH OF THE ");
-    wprintf(L"\033[0;31m");
     wprintf(L"IMPERIAL IMP!!\n");
     wprintf(L"\033[0m");
   } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE\nYOU SHALL NOW FACE THE FURY OF THE ");
-    wprintf(L"\033[0;31m");
     wprintf(L"OMINOUS ORC!!\n");
     wprintf(L"\033[0m");
   }
@@ -472,14 +546,20 @@ void bossIntro () {
 
 void bossDead() {
   if ((player[0] == 2) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME!!\n");
     map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
+    wprintf(L"\033[0;34m");
     wprintf(L"AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND A RUSTY SWORD ... AT LEAST ITS BETTER THAN YOUR MIGHTY STICK\nRUSTY SWORD OBTAINED!!\n");
+    wprintf(L"\033[0m");
     sword = 1;
   } else if ((player[0] == 12) && (player[1] == 4)) {
+    wprintf(L"\033[0;35m");
     wprintf(L"FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME!!\n");
     map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
+    wprintf(L"\033[0;34m");
     wprintf(L"AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL\nGOBLINSLAYER OBTAINED!!\n");
+    wprintf(L"\033[0m");
     sword = 2;
   }
 }
