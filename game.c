@@ -20,6 +20,73 @@ int xp = 0;
 int eHp;
 int eDamage;
 int runAway = 0;
+struct Enemy {
+  char  name[20];
+  char  attack[10];
+};
+struct Boss {
+  char name[20];
+  char attack[20];
+  char in1[50];
+  char in2[50];
+  char out1[50];
+  char out2[50];
+  int  sword;
+  char swordName[20];
+  int  lvl;
+};
+struct Enemy enemies[10];
+strcpy( enemies[0].name, "ENEMY");
+strcpy( enemies[0].attack, "HITS");
+strcpy( enemies[1].name, "WEAK IMP");
+strcpy( enemies[1].attack, "FLAILS AT");
+strcpy(enemies[2].name, "BEEFY IMP");
+strcpy(enemies[2].attack, "BITES");
+strcpy(enemies[3].name, "STRONG IMP");
+strcpy(enemies[3].attack, "KICKS");
+strcpy(enemies[4].name, "GUARDIAN IMP");
+strcpy(enemies[4].attack, "PARRIES");
+strcpy(enemies[5].name, "YOUNG ORC");
+strcpy(enemies[5].attack, "PUNCHES");
+strcpy(enemies[6].name, "WARRIOR ORC");
+strcpy(enemies[6].attack, "CHARGES AT");
+strcpy(enemies[7].name, "ASSASSIN ORC");
+strcpy(enemies[7].attack, "STABS");
+strcpy(enemies[8].name, "SMALL GOBLIN");
+strcpy(enemies[8].attack, "TRIPS");
+strcpy(enemies[9].name, "UGLY GOBLIN");
+strcpy(enemies[9].attack, "LOOKS AT");
+struct Boss bosses[3];
+strcpy(bosses[0].name, "THE IMPERIAL IMP");
+strcpy(bosses[0].attack, "THROWS AN IMP AT YOU");
+strcpy(bosses[0].in1, "MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN");
+strcpy(bosses[0].in2, "YOU SHALL NOW FACE THE WRATH OF THE");
+strcpy(bosses[0].out1, "NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME");
+strcpy(bosses[0].out2, "AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND AN OLD SWORD");
+       bosses[0].sword = 1;
+strcpy(bosses[0].swordName, "RUSTY SWORD");
+       bosses[0].lvl = 4;
+
+strcpy(bosses[1].name, "THE OMINOUS ORC");
+strcpy(bosses[1].attack, "THROWS A PILLAR AT YOU");
+strcpy(bosses[1].in1, "SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE");
+strcpy(bosses[1].in2, "YOU SHALL NOW FACE THE FURY OF THE");
+strcpy(bosses[1].out1, "FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME");
+strcpy(bosses[1].out2, "AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL");
+       bosses[1].sword = 2;
+strcpy(bosses[1].swordName, "GOBLINSLAYER");
+       bosses[1].lvl = 7;
+
+strcpy(bosses[2].name, "THE GLUTINOUS GOBLIN");
+strcpy(bosses[2].attack, "CONSUMES A GOBLIN TO SCARE YOU");
+strcpy(bosses[2].in1, "HEHEEHE ... TASTY HUMAN ... YOU HAVE ENTERED MY CAVES");
+strcpy(bosses[2].in2, "YOU SHALL NOW FACE THE HUNGER OF THE");
+strcpy(bosses[2].out1, "ARGHH YOU STUPID HUMAN ... THE SPIDERS WILL FINISH YOU OFF");
+strcpy(bosses[2].out2, "AS THE GOBLIN DIES YOU NOTICE A NECKLACE WITH A KEY ON HIS NECK\nIT UNLOCKS A TREASURE CHEST");
+       bosses[2].sword = 3;
+strcpy(bosses[2].swordName, "SPIDERBANE");
+       bosses[2].lvl = 10;
+
 int map[64][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -33,19 +100,19 @@ int map[64][60] = { // Looked up how to declare a matrix at https://beginnersboo
   {-1,-1,+5,+5,+5,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+5,+5,+5,+5,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+5,+6,+6,+6,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+5,+6,-7,+6,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+5,+6,-5,+6,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+5,+6,+6,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+5,+6,+6,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,+7,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,+7,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,-1,+7,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+8,+8,+7,+8,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+8,+7,+8,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+7,+6,+7,+8,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+6,+5,+6,+7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+5,+4,+5,+6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+4,+3,+4,+5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-  {-1,-1,+3,+1,+3,+4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+7,+9,+7,+8,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+6,+9,-6,+9,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,+9,+9,+9,+9,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,+1,+1,+1,+2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -344,8 +411,8 @@ void fightSetUp() {
   hp = 100 + ((level-1) * 10);
   damage = 10 + ((level-1) * 1);
   if (eHp < 0) {
-    eHp = eHp * -1;
-    eDamage = eDamage * -1;
+    eHp = bosses[abs(map[player[0]][player[1]]+4)] * 100;
+    eDamage = bosses[abs(map[player[0]][player[1]]+4)] * 12;
     bossFight();
   } else {
     fight();
@@ -430,33 +497,15 @@ void playerTurn () {
         eHp = eHp - (damage+15);
         wprintf(L"YOU DEAL %d DAMAGE!!\t\t\t\t", damage+15);
       }
-      wprintf(L"\033[0;31m");
-      if (map[player[0]][player[1]] == 1) {
-        wprintf(L"THE IMP HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == 2) {
-        wprintf(L"THE BEEFY IMP HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == 3) {
-        wprintf(L"THE STRONG IMP HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == 4) {
-        wprintf(L"THE GUARDIAN IMP HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == -4) {
-        wprintf(L"\033[0;35m");
-        wprintf(L"THE IMPERIAL IMP HAS %d HP LEFT\n",eHp);
+      if (map[player[0]][player[1]] > 0) {
+        wprintf(L"\033[0;31m");
+        wprintf(L"THE %s HAS %d HP LEFT\n",enemies[map[player[0]][player[1]]].name,eHp);
         wprintf(L"\033[0m");
-      } else if (map[player[0]][player[1]] == -7) {
+      } else if (map[player[0]][player[1]] < 0) {
         wprintf(L"\033[0;35m");
-        wprintf(L"THE OMINOUS ORC HAS %d HP LEFT\n",eHp);
+        wprintf(L"%s HAS %d HP LEFT\n",bosses[abs(map[player[0]][player[1]]+4)].name,eHp);
         wprintf(L"\033[0m");
-      } else if (map[player[0]][player[1]] == 5) {
-        wprintf(L"THE YOUNG ORC HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == 6) {
-        wprintf(L"THE WARRIOR ORC HAS %d HP LEFT\n",eHp);
-      } else if (map[player[0]][player[1]] == 7) {
-        wprintf(L"THE ASSASSIN ORC HAS %d HP LEFT\n",eHp);
-      } else {
-        wprintf(L"THE ENEMY HAS %d HP LEFT\n",eHp);
       }
-      wprintf(L"\033[0m");
       break;
     case 'q':
       wprintf(L"\033[0;34m");
@@ -486,23 +535,7 @@ void playerTurn () {
 
 void enemyTurn() {
   wprintf(L"\033[0;31m");
-  if (map[player[0]][player[1]] == 1) {
-    wprintf(L"THE IMP FLAILS AT YOU!!\n");
-  } else if (map[player[0]][player[1]] == 2) {
-    wprintf(L"THE BEEFY IMP BITES YOU!!\n");
-  } else if (map[player[0]][player[1]] == 3) {
-    wprintf(L"THE STRONG IMP KICKS YOU!!\n");
-  } else if (map[player[0]][player[1]] == 4) {
-    wprintf(L"THE GUARDIAN IMP PARRIES YOU!!\n");
-  } else if (map[player[0]][player[1]] == 5) {
-    wprintf(L"THE YOUNG ORC PUNCHES YOU!!\n");
-  } else if (map[player[0]][player[1]] == 6) {
-    wprintf(L"THE WARRIOR ORC CHARGES YOU!!\n");
-  } else if (map[player[0]][player[1]] == 7) {
-    wprintf(L"THE ASSASSIN ORC STABS YOU!!\n");
-  } else {
-    wprintf(L"THE ENEMY HITS YOU!!\n");
-  }
+  wprintf(L"THE %s %s YOU!!\n",enemies[map[player[0]][player[1]]].name,enemies[map[player[0]][player[1]]].attack);
   hp = hp - eDamage;
   wprintf(L"IT DEALS %d damage!!\t\t\t\t",eDamage);
   wprintf(L"\033[0;34m");
@@ -511,55 +544,27 @@ void enemyTurn() {
 }
 
 void bossTurn () {
-  if ((player[0] == 2) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"THE IMPERIAL IMP THROWS AN IMP AT YOU!!\n");
-    hp = hp - eDamage;
-    wprintf(L"The IMPERIAL IMP DEALS %d DAMAGE!!\t\t",eDamage);
-    wprintf(L"\033[0;34m");
-    wprintf(L"YOU HAVE %d HP LEFT\n",hp);
-    wprintf(L"\033[0m");
-  } else if ((player[0] == 12) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"THE OMINOUS ORC LAUNCHES A PILLAR AT YOU!!\n");
-    hp = hp - eDamage;
-    wprintf(L"The OMINOUS ORC DEALS %d DAMAGE!!\t\t",eDamage);
-    wprintf(L"\033[0;34m");
-    wprintf(L"YOU HAVE %d HP LEFT\n",hp);
-    wprintf(L"\033[0m");
-  }
+  wprintf(L"\033[0;35m");
+  wprintf(L"%s %s!!\n",bosses[abs(map[player[0]][player[1]]+4)].name,bosses[abs(map[player[0]][player[1]]+4)].attack);
+  hp = hp - eDamage;
+  wprintf(L"%s DEALS %d DAMAGE!!\t\t",bosses[abs(map[player[0]][player[1]]+4)].name,eDamage);
+  wprintf(L"\033[0;34m");
+  wprintf(L"YOU HAVE %d HP LEFT\n",hp);
+  wprintf(L"\033[0m");
 }
 
 void bossIntro () {
-  if ((player[0] == 2) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN\nYOU SHALL NOW FACE THE WRATH OF THE ");
-    wprintf(L"IMPERIAL IMP!!\n");
-    wprintf(L"\033[0m");
-  } else if ((player[0] == 12) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE\nYOU SHALL NOW FACE THE FURY OF THE ");
-    wprintf(L"OMINOUS ORC!!\n");
-    wprintf(L"\033[0m");
-  }
+  wprintf(L"\033[0;35m");
+  wprintf(L"%s %s %s!!",bosses[abs(map[player[0]][player[1]]+4)].in1,bosses[abs(map[player[0]][player[1]]+4)].in2,bosses[abs(map[player[0]][player[1]]+4)].name);
+  wprintf(L"\033[0m");
 }
 
 void bossDead() {
-  if ((player[0] == 2) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME!!\n");
-    map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
-    wprintf(L"\033[0;34m");
-    wprintf(L"AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND A RUSTY SWORD ... AT LEAST ITS BETTER THAN YOUR MIGHTY STICK\nRUSTY SWORD OBTAINED!!\n");
-    wprintf(L"\033[0m");
-    sword = 1;
-  } else if ((player[0] == 12) && (player[1] == 4)) {
-    wprintf(L"\033[0;35m");
-    wprintf(L"FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME!!\n");
-    map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
-    wprintf(L"\033[0;34m");
-    wprintf(L"AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL\nGOBLINSLAYER OBTAINED!!\n");
-    wprintf(L"\033[0m");
-    sword = 2;
-  }
+  wprintf(L"\033[0;35m");
+  wprintf(L"%s!!\n",bosses[abs(map[player[0]][player[1]]+4)].out1);
+  map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
+  wprintf(L"\033[0;34m");
+  wprintf(L"%s\n%s OBTAINED!!\n",bosses[abs(map[player[0]][player[1]]+4)].out2,bosses[abs(map[player[0]][player[1]]+4)].swordName);
+  wprintf(L"\033[0m");
+  sword = bosses[abs(map[player[0]][player[1]]+4)].sword;
 }
