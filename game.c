@@ -22,71 +22,88 @@ int eDamage;
 int runAway = 0;
 struct Enemy {
   char  name[20];
-  char  attack[10];
+  char  attack[20];
 };
 struct Boss {
-  char name[20];
-  char attack[20];
-  char in1[50];
-  char in2[50];
-  char out1[50];
-  char out2[50];
+  char name[40];
+  char attack[40];
+  char in1[100];
+  char in2[100];
+  char out1[100];
+  char out2[100];
+  char swordName[40];
   int  sword;
-  char swordName[20];
   int  lvl;
 };
-struct Enemy enemies[10];
-strcpy( enemies[0].name, "ENEMY");
-strcpy( enemies[0].attack, "HITS");
-strcpy( enemies[1].name, "WEAK IMP");
-strcpy( enemies[1].attack, "FLAILS AT");
-strcpy(enemies[2].name, "BEEFY IMP");
-strcpy(enemies[2].attack, "BITES");
-strcpy(enemies[3].name, "STRONG IMP");
-strcpy(enemies[3].attack, "KICKS");
-strcpy(enemies[4].name, "GUARDIAN IMP");
-strcpy(enemies[4].attack, "PARRIES");
-strcpy(enemies[5].name, "YOUNG ORC");
-strcpy(enemies[5].attack, "PUNCHES");
-strcpy(enemies[6].name, "WARRIOR ORC");
-strcpy(enemies[6].attack, "CHARGES AT");
-strcpy(enemies[7].name, "ASSASSIN ORC");
-strcpy(enemies[7].attack, "STABS");
-strcpy(enemies[8].name, "SMALL GOBLIN");
-strcpy(enemies[8].attack, "TRIPS");
-strcpy(enemies[9].name, "UGLY GOBLIN");
-strcpy(enemies[9].attack, "LOOKS AT");
-struct Boss bosses[3];
-strcpy(bosses[0].name, "THE IMPERIAL IMP");
-strcpy(bosses[0].attack, "THROWS AN IMP AT YOU");
-strcpy(bosses[0].in1, "MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN");
-strcpy(bosses[0].in2, "YOU SHALL NOW FACE THE WRATH OF THE");
-strcpy(bosses[0].out1, "NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME");
-strcpy(bosses[0].out2, "AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND AN OLD SWORD");
+struct Enemy enemies[2] = {
+  {"ENEMY","HITS"},
+  {"WEAK IMP","FLAILS AT"}
+};
+
+/*
+strncpy(enemies[0].name, "ENEMY", 20);
+strncpy(enemies[0].attack, "HITS", 20);
+//strncpy(enemies[1].name, "WEAK IMP", 20);
+enemies[1].name[0] = "W";
+enemies[1].name[1] = "E";
+enemies[1].name[2] = "A";
+enemies[1].name[3] = "K";
+enemies[1].name[4] = " ";
+enemies[1].name[5] = "I";
+enemies[1].name[6] = "M";
+enemies[1].name[7] = "P";
+strncpy(enemies[1].attack, "FLAILS AT", 20);
+strncpy(enemies[2].name, "BEEFY IMP", 20);
+strncpy(enemies[2].attack, "BITES", 20);
+strncpy(enemies[3].name, "STRONG IMP", 20);
+strncpy(enemies[3].attack, "KICKS", 20);
+strncpy(enemies[4].name, "GUARDIAN IMP", 20);
+strncpy(enemies[4].attack, "PARRIES", 20);
+strncpy(enemies[5].name, "YOUNG ORC", 20);
+strncpy(enemies[5].attack, "PUNCHES", 20);
+strncpy(enemies[6].name, "WARRIOR ORC", 20);
+strncpy(enemies[6].attack, "CHARGES AT", 20);
+strncpy(enemies[7].name, "ASSASSIN ORC", 20);
+strncpy(enemies[7].attack, "STABS", 20);
+strncpy(enemies[8].name, "SMALL GOBLIN", 20);
+strncpy(enemies[8].attack, "TRIPS", 20);
+strncpy(enemies[9].name, "UGLY GOBLIN", 20);
+strncpy(enemies[9].attack, "LOOKS AT", 20);
+
+strncpy(bosses[0].name, "THE IMPERIAL IMP", 40);
+strncpy(bosses[0].attack, "THROWS AN IMP AT YOU", 40);
+strncpy(bosses[0].in1, "MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN", 50);
+strncpy(bosses[0].in2, "YOU SHALL NOW FACE THE WRATH OF THE", 50);
+strncpy(bosses[0].out1, "NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME", 50);
+strncpy(bosses[0].out2, "AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND AN OLD SWORD", 50);
        bosses[0].sword = 1;
-strcpy(bosses[0].swordName, "RUSTY SWORD");
+strncpy(bosses[0].swordName, "RUSTY SWORD", 40);
        bosses[0].lvl = 4;
 
-strcpy(bosses[1].name, "THE OMINOUS ORC");
-strcpy(bosses[1].attack, "THROWS A PILLAR AT YOU");
-strcpy(bosses[1].in1, "SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE");
-strcpy(bosses[1].in2, "YOU SHALL NOW FACE THE FURY OF THE");
-strcpy(bosses[1].out1, "FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME");
-strcpy(bosses[1].out2, "AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL");
+strncpy(bosses[1].name, "THE OMINOUS ORC", 40);
+strncpy(bosses[1].attack, "THROWS A PILLAR AT YOU", 40);
+strncpy(bosses[1].in1, "SO YOU HAVE COME ... IDIOT HUMAN ... YOU HAVE ENTERED MY CASTLE", 50);
+strncpy(bosses[1].in2, "YOU SHALL NOW FACE THE FURY OF THE", 50);
+strncpy(bosses[1].out1, "FIRST YOU KILL MY COUSIN ... AND THEN YOU SLAY ME", 50);
+strncpy(bosses[1].out2, "AS THE ORC DIES HE DROPS HIS MASSIVE SWORD\nIT LOOKS PRETTY MEAN BUT ALSO POWERFUL", 50);
        bosses[1].sword = 2;
-strcpy(bosses[1].swordName, "GOBLINSLAYER");
+strncpy(bosses[1].swordName, "GOBLINSLAYER", 40);
        bosses[1].lvl = 7;
 
-strcpy(bosses[2].name, "THE GLUTINOUS GOBLIN");
-strcpy(bosses[2].attack, "CONSUMES A GOBLIN TO SCARE YOU");
-strcpy(bosses[2].in1, "HEHEEHE ... TASTY HUMAN ... YOU HAVE ENTERED MY CAVES");
-strcpy(bosses[2].in2, "YOU SHALL NOW FACE THE HUNGER OF THE");
-strcpy(bosses[2].out1, "ARGHH YOU STUPID HUMAN ... THE SPIDERS WILL FINISH YOU OFF");
-strcpy(bosses[2].out2, "AS THE GOBLIN DIES YOU NOTICE A NECKLACE WITH A KEY ON HIS NECK\nIT UNLOCKS A TREASURE CHEST");
+strncpy(bosses[2].name, "THE GLUTINOUS GOBLIN", 40);
+strncpy(bosses[2].attack, "CONSUMES A GOBLIN TO SCARE YOU", 40);
+strncpy(bosses[2].in1, "HEHEEHE ... TASTY HUMAN ... YOU HAVE ENTERED MY CAVES", 50);
+strncpy(bosses[2].in2, "YOU SHALL NOW FACE THE HUNGER OF THE", 50);
+strncpy(bosses[2].out1, "ARGHH YOU STUPID HUMAN ... THE SPIDERS WILL FINISH YOU OFF", 50);
+strncpy(bosses[2].out2, "AS THE GOBLIN DIES YOU NOTICE A KEY ON HIS NECK\nIT UNLOCKS A TREASURE CHEST", 50);
        bosses[2].sword = 3;
-strcpy(bosses[2].swordName, "SPIDERBANE");
+strncpy(bosses[2].swordName, "SPIDERBANE", 40);
        bosses[2].lvl = 10;
+*/
 
+struct Boss bosses[1] = {
+  {"THE IMPERIAL IMP","THROWS AN IMP AT YOU","MUHAHA ... FOOLISH HUMAN ... YOU HAVE ENTERED MY DOMAIN","YOU SHALL NOW FACE THE WRATH OF THE""NOOOOOO YOU CURSED HUMAN ... MY COUSINS WILL AVENGE ME","AS THE IMP DIES YOU NOTICE A DOOR BEHIND HIS THRONE\nINSIDE YOU FIND AN OLD SWORD","RUSTY SWORD",1,4}
+};
 int map[64][60] = { // Looked up how to declare a matrix at https://beginnersbook.com/2014/01/2d-arrays-in-c-example/
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
   {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -175,12 +192,15 @@ int main () {
   //system("MODE 56,37");
   system("MODE 120,75");
   _setmode(_fileno(stdout), 0x00020000);
+  database = fopen(fileName,"npc");
   newGame();
   return 0;
 }
 
 void newGame () {
   wprintf(L"\e[1;1H\e[2J");
+  //bosses[0].sword = 1;
+  wprintf(L">> %s <<",bosses[0].name);
   wprintf(L"\033[0;33m");
   wprintf(L"CONFIRM:\n\ty = yes\n\tn = no\nMOVEMENT:\n\tw = up\n\ta = left\n\ts = down\n\td = right\n\tz = map\n\tc = camp\nACTIONS:\n\ta = attack\n\tq = inventory\n\tw = wait\n\ts = retreat\n");
   wprintf(L"\033[0;32m");
@@ -411,8 +431,8 @@ void fightSetUp() {
   hp = 100 + ((level-1) * 10);
   damage = 10 + ((level-1) * 1);
   if (eHp < 0) {
-    eHp = bosses[abs(map[player[0]][player[1]]+4)] * 100;
-    eDamage = bosses[abs(map[player[0]][player[1]]+4)] * 12;
+    eHp = bosses[abs(map[player[0]][player[1]]+4)].lvl * 100;
+    eDamage = bosses[abs(map[player[0]][player[1]]+4)].lvl * 12;
     bossFight();
   } else {
     fight();
@@ -535,7 +555,7 @@ void playerTurn () {
 
 void enemyTurn() {
   wprintf(L"\033[0;31m");
-  wprintf(L"THE %s %s YOU!!\n",enemies[map[player[0]][player[1]]].name,enemies[map[player[0]][player[1]]].attack);
+  wprintf(L"THE %c %c YOU!!\n",enemies[map[player[0]][player[1]]].name,enemies[map[player[0]][player[1]]].attack);
   hp = hp - eDamage;
   wprintf(L"IT DEALS %d damage!!\t\t\t\t",eDamage);
   wprintf(L"\033[0;34m");
@@ -545,9 +565,9 @@ void enemyTurn() {
 
 void bossTurn () {
   wprintf(L"\033[0;35m");
-  wprintf(L"%s %s!!\n",bosses[abs(map[player[0]][player[1]]+4)].name,bosses[abs(map[player[0]][player[1]]+4)].attack);
+  wprintf(L"%c %c!!\n",bosses[abs(map[player[0]][player[1]]+4)].name,bosses[abs(map[player[0]][player[1]]+4)].attack);
   hp = hp - eDamage;
-  wprintf(L"%s DEALS %d DAMAGE!!\t\t",bosses[abs(map[player[0]][player[1]]+4)].name,eDamage);
+  wprintf(L"%c DEALS %d DAMAGE!!\t\t",bosses[abs(map[player[0]][player[1]]+4)].name,eDamage);
   wprintf(L"\033[0;34m");
   wprintf(L"YOU HAVE %d HP LEFT\n",hp);
   wprintf(L"\033[0m");
@@ -555,16 +575,16 @@ void bossTurn () {
 
 void bossIntro () {
   wprintf(L"\033[0;35m");
-  wprintf(L"%s %s %s!!",bosses[abs(map[player[0]][player[1]]+4)].in1,bosses[abs(map[player[0]][player[1]]+4)].in2,bosses[abs(map[player[0]][player[1]]+4)].name);
+  wprintf(L"%c %c %c!!",bosses[abs(map[player[0]][player[1]]+4)].in1,bosses[abs(map[player[0]][player[1]]+4)].in2,bosses[abs(map[player[0]][player[1]]+4)].name);
   wprintf(L"\033[0m");
 }
 
 void bossDead() {
   wprintf(L"\033[0;35m");
-  wprintf(L"%s!!\n",bosses[abs(map[player[0]][player[1]]+4)].out1);
+  wprintf(L"%c!!\n",bosses[abs(map[player[0]][player[1]] + 4)].out1);
   map[player[0]][player[1]] = map[player[0]][player[1]] * -1;
   wprintf(L"\033[0;34m");
-  wprintf(L"%s\n%s OBTAINED!!\n",bosses[abs(map[player[0]][player[1]]+4)].out2,bosses[abs(map[player[0]][player[1]]+4)].swordName);
+  wprintf(L"%c\n%c OBTAINED!!\n",bosses[abs(map[player[0]][player[1]] +4)].out2,bosses[abs(map[player[0]][player[1]]+4)].swordName);
   wprintf(L"\033[0m");
   sword = bosses[abs(map[player[0]][player[1]]+4)].sword;
 }
